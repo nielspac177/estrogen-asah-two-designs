@@ -21,14 +21,14 @@ export UV_PROJECT_ENVIRONMENT="$HOME/.venvs/estrogen-icu"   # per arm
 
 Every step below can first be checked with `uv run pytest` (no data needed).
 
-## 1. Arm 1 — observational (ICU)
+## 1. Arm 1, observational (ICU)
 
 ### 1a. Build the MIMIC-IV DuckDB
 
 The ICU extractor reads MIMIC-IV from a DuckDB database. Build it once with the
 companion tool:
 
-- **[nielspac177/mimic-iv-duckdb](https://github.com/nielspac177/mimic-iv-duckdb)** —
+- **[nielspac177/mimic-iv-duckdb](https://github.com/nielspac177/mimic-iv-duckdb)** , 
   follow its README to load the PhysioNet MIMIC-IV v3.1 CSVs into `mimic4.db`
   (schemas `mimiciv_hosp`, `mimiciv_icu`).
 
@@ -62,7 +62,7 @@ Key numbers on real data: 1,771 aSAH admissions; primary adjusted OR 0.86
 (0.58–1.28); specification curve 41/71 significant forks, all anti-protective;
 age×sex difference-in-differences 1.04 (0.62–1.76).
 
-## 2. Arm 2 — genetic (Mendelian randomization)
+## 2. Arm 2, genetic (Mendelian randomization)
 
 ### 2a. Download the GWAS
 

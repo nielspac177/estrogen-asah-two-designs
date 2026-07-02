@@ -5,12 +5,14 @@ that you know Mendelian randomization or the statistics. We go through the core
 files line by line, deriving the maths where it matters. File paths are relative to
 the repository root.
 
+> A rendered PDF of this walkthrough is at [`INTERNALS.pdf`](INTERNALS.pdf).
+
 Contents:
-1. The MR estimators — `mr/src/estrogen_mr/methods.py`
-2. Instruments: clumping and allele harmonization — `mr/src/estrogen_mr/instruments.py`
-3. Multivariable MR — `mr/src/estrogen_mr/mvmr.py`
-4. Quality control, power, equivalence — `mr/src/estrogen_mr/qc.py`
-5. The ICU identification argument — `icu/src/estrogen_asah_dci/analysis/multiverse.py`
+1. The MR estimators, `mr/src/estrogen_mr/methods.py`
+2. Instruments: clumping and allele harmonization, `mr/src/estrogen_mr/instruments.py`
+3. Multivariable MR, `mr/src/estrogen_mr/mvmr.py`
+4. Quality control, power, equivalence, `mr/src/estrogen_mr/qc.py`
+5. The ICU identification argument, `icu/src/estrogen_asah_dci/analysis/multiverse.py`
 
 ---
 
@@ -35,15 +37,15 @@ def ivw(bx, sx, by, sy) -> MRResult:
     return _ci(est, se, "IVW", len(bx))
 ```
 
-- `w = 1.0 / sy**2` — each SNP's weight is one over its outcome variance. A SNP
+- `w = 1.0 / sy**2`, each SNP's weight is one over its outcome variance. A SNP
   whose outcome effect is measured precisely (small `sy`) counts more. This is the
   "inverse-variance" in the name.
-- `est = sum(w*bx*by) / sum(w*bx**2)` — this is the weighted least-squares slope of
+- `est = sum(w*bx*by) / sum(w*bx**2)`, this is the weighted least-squares slope of
   a line through the origin. If you minimise `sum(w * (by - theta*bx)^2)` over
   `theta`, set the derivative to zero, you get exactly `theta = sum(w*bx*by) /
   sum(w*bx^2)`. So IVW is just a weighted regression of outcome effects on exposure
   effects, forced through zero.
-- `se = sqrt(1 / sum(w*bx**2))` — the standard error of that slope. It shrinks when
+- `se = sqrt(1 / sum(w*bx**2))`, the standard error of that slope. It shrinks when
   you have many strong instruments (large `bx`) measured precisely (small `sy`).
 - `_ci(...)` wraps the estimate into a result object with a 95% interval and a
   p-value; see below.
@@ -62,7 +64,7 @@ def _ci(est, se, method, n, extra_dof=0) -> MRResult:
                     float(est - 1.96 * se), float(est + 1.96 * se), p, n)
 ```
 
-- `z = est / se` — a standard z-score: how many standard errors the estimate sits
+- `z = est / se`, a standard z-score: how many standard errors the estimate sits
   from zero.
 - `stats.norm.sf(abs(z))` is the upper tail of the normal (`sf` = survival function
   = `1 - cdf`); doubling it gives a two-sided p-value.
@@ -279,18 +281,18 @@ cannot tell whose effect a SNP is really tagging. MVMR fits both at once.
 
 A guided tour; the code reads straightforwardly given section 1.
 
-- `ivw_random` — IVW with the same multiplicative random-effects inflation as MVMR,
+- `ivw_random`, IVW with the same multiplicative random-effects inflation as MVMR,
   used as the reported primary.
-- `steiger` — for each SNP, compares how much variance it explains in the exposure
+- `steiger`, for each SNP, compares how much variance it explains in the exposure
   versus the outcome (`r^2 = F / (F + n - 2)`), and keeps SNPs that explain more of
   the exposure. This checks the arrow points exposure → outcome, not the reverse.
-- `mr_presso_global` — simulates outcome effects under the fitted model, recomputes
+- `mr_presso_global`, simulates outcome effects under the fitted model, recomputes
   the residual sum of squares many times, and asks whether the observed one is
   extreme. A small p means outlier pleiotropy.
-- `power_mde` — inverts the usual power formula. `mde = (z_alpha + z_power) * se`
+- `power_mde`, inverts the usual power formula. `mde = (z_alpha + z_power) * se`
   gives the smallest effect detectable at 80% power; the function reports it per
   year and per standard deviation. This is why we report a bound, not "no effect".
-- `tost` — two one-sided tests. It asks separately whether the estimate is
+- `tost`, two one-sided tests. It asks separately whether the estimate is
   significantly inside a pre-set "smallest effect of interest" on the protective
   side and on the harmful side. We could reject strong protection (p 0.027) but not
   harm (p 0.53), so the honest statement is a bounded null, not equivalence.
@@ -302,13 +304,13 @@ A guided tour; the code reads straightforwardly given section 1.
 The observational arm's whole point is to show it *cannot* answer the question. Two
 functions carry that argument.
 
-- `spec_curve` — loops over every defensible modelling choice (menopause age cutoff,
+- `spec_curve`, loops over every defensible modelling choice (menopause age cutoff,
   covariate set, outcome definition, data source) and records the odds ratio for
   each. On real data 41 of 71 fits were significant and every one pointed away from
   protection. That pattern is the fingerprint of age acting on vasospasm, not of
   estrogen, because age both defines the exposure and independently raises
   vasospasm risk.
-- `age_sex_did` — fits a flexible age curve for the DCI risk and lets it differ by
+- `age_sex_did`, fits a flexible age curve for the DCI risk and lets it differ by
   sex, then reads off the female-minus-male change across the menopausal transition.
   Men age without an abrupt hormone change, so they absorb the shared ageing
   gradient; a female-specific jump after menopause would be the one thing age cannot
