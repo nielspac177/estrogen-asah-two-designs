@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Estrogen state and delayed cerebral ischemia after aneurysmal SAH: a reproducible multi-database ICU pilot"
+authors:
+  - family-names: Pacheco
+    given-names: Niels
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/nielspac177/estrogen-asah-dci"
+keywords:
+  - subarachnoid hemorrhage
+  - delayed cerebral ischemia
+  - estrogen
+  - MIMIC-IV
+  - eICU
+  - real-world evidence

@@ -1,0 +1,13 @@
+name: vasospasm
+description: Cerebral vasospasm / cerebrovascular vasoconstriction diagnoses
+icd9: []             # ICD-9 has no specific cerebral-vasospasm code (documented limitation)
+icd10:               # matched as prefixes
+  - "I67848"         # Other cerebrovascular vasospasm and vasoconstriction
+  - "I67841"         # Reversible cerebrovascular vasoconstriction syndrome
+eicu_diagnosis_patterns:   # regex, case-insensitive, against eICU diagnosisstring
+  - "subarachnoid hemorrhage.*vasospasm"
+  - "vasospasm"
+notes: >
+  ICD-9-era MIMIC records will rarely carry an explicit vasospasm code; the DCI
+  composite therefore also relies on rescue procedures and delayed infarction
+  (see dci_procedures, ADR-0001/0003).

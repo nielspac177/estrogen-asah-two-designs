@@ -1,0 +1,28 @@
+name: hrt
+description: Estrogen / hormone-replacement and estrogen-containing hormonal therapy
+drug_patterns:            # regex, case-insensitive, against drug / drugname strings
+  - "estrogen"
+  - "estradiol"
+  - "estrace"
+  - "premarin"
+  - "conjugated estr"
+  - "ethinyl estradiol"
+  - "estropipate"
+  - "esterified estr"
+  - "estring"
+  - "vagifem"
+  - "climara"
+  - "estraderm"
+  - "menest"
+progestin_patterns:       # for the broader "any hormonal (incl OCP)" secondary
+  - "norethindrone"
+  - "levonorgestrel"
+  - "drospirenone"
+  - "desogestrel"
+  - "norgestimate"
+  - "norgestrel"
+notes: >
+  Primary exposure is estrogen-containing therapy (drug_patterns). The broader
+  hormonal set adds progestin-only/combined products for a sensitivity analysis.
+  In MIMIC these are inpatient prescriptions (secondary/exploratory only); in eICU
+  the admissionDrug table captures home meds (better chronic-use proxy).

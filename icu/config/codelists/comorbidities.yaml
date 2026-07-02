@@ -1,0 +1,15 @@
+name: comorbidities
+description: Baseline comorbidity flags (confounders) from diagnosis codes
+htn_icd9: ["401", "402", "403", "404", "405"]
+htn_icd10: ["I10", "I11", "I12", "I13", "I15"]
+diabetes_icd9: ["250"]
+diabetes_icd10: ["E10", "E11", "E13"]
+smoking_icd9: ["3051", "V1582"]
+smoking_icd10: ["F17", "Z87891"]
+htn_eicu: ["hypertension"]
+diabetes_eicu: ["diabetes"]
+smoking_eicu: ["smoking", "smoker", "tobacco"]
+notes: >
+  Hypertension, diabetes, and current/!former smoking are the pre-specified
+  confounders available across both sources. eICU also contributes these via
+  diagnosisstring patterns; MIMIC via ICD codes here.

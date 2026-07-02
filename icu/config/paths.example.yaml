@@ -1,0 +1,11 @@
+# Copy to config/paths.yaml (gitignored) and edit for your machine.
+# These point at LOCAL, credentialed PhysioNet data. Never commit paths.yaml.
+
+# MIMIC-IV v3.1 as a DuckDB database (schemas: mimiciv_hosp, mimiciv_icu, mimiciv_derived)
+mimic_iv_db: "/path/to/mimic4.db"
+
+# eICU-CRD v2.0 directory of gzipped CSVs (patient.csv.gz, diagnosis.csv.gz, ...)
+eicu_dir: "/path/to/eicu-collaborative-research-database-2.0"
+
+# where derived tables/figures are written (gitignored)
+outputs_dir: "outputs"

@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arm: [icu, mr]
+    defaults:
+      run:
+        working-directory: ${{ matrix.arm }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv python install 3.11
+      - run: uv sync --extra dev
+      - name: Lint
+        run: uv run ruff check .
+      - name: Guard - no data committed
+        run: |
+          if git ls-files | grep -E '\.(csv|csv\.gz|tsv\.gz|txt\.gz|db|duckdb|parquet)$' | grep -v '/synthetic/'; then
+            echo "ERROR: data-like files tracked"; exit 1
+          fi
+          echo "OK: no source data committed"
+      - name: Tests
+        run: uv run pytest

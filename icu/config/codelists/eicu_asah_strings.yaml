@@ -1,0 +1,21 @@
+name: eicu_asah_strings
+description: eICU-specific string matchers for aSAH cohort inclusion/exclusion
+admitdx_include:          # exact-ish APACHE admission-dx names (matched case-insensitive substring)
+  - "Subarachnoid hemorrhage/intracranial aneurysm"
+  - "Subarachnoid hemorrhage/intracranial aneurysm, surgery for"
+diagnosis_include_patterns:   # regex against diagnosisstring
+  - "disorders of vasculature.*subarachnoid hemorrhage"
+  - "subarachnoid hemorrhage.*ruptured berry aneurysm"
+exclude_patterns:         # regex against diagnosisstring / admitdx — drop these
+  - "trauma"
+  - "traumatic"
+  - "intracranial injury"
+  - "fracture of skull"
+  - "AV malformation"
+  - "arteriovenous malformation"
+  - "cavernous angioma"
+notes: >
+  admitdx_include covers the structured APACHE path (473 + 303 stays in v2.0);
+  diagnosis_include_patterns catch hemorrhagic-stroke SAH not flagged at
+  admission. exclude_patterns remove traumatic SAH and non-aneurysmal sources
+  (AVM, cavernous angioma) per ADR-0001.

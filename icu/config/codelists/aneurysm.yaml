@@ -1,0 +1,11 @@
+name: aneurysm
+description: Cerebral / intracranial aneurysm diagnosis codes
+icd9:
+  - "4373"           # Cerebral aneurysm, nonruptured
+icd10:               # matched as prefixes
+  - "I671"           # Cerebral aneurysm, nonruptured
+  - "Q28"            # Congenital cerebrovascular malformations (incl. aneurysm)
+notes: >
+  Used together with an SAH code to define aneurysmal SAH. Ruptured aneurysms are
+  frequently coded only as SAH (430 / I60), so aneurysm evidence may instead come
+  from a securing procedure (see aneurysm_procedures).

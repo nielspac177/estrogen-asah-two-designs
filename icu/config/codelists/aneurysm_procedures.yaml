@@ -1,0 +1,20 @@
+name: aneurysm_procedures
+description: Aneurysm-securing procedures (surgical clipping / endovascular coiling)
+icd9_proc:
+  - "3951"           # Clipping of aneurysm
+  - "3952"           # Other repair of aneurysm
+  - "3972"           # Endovascular (embolization/occlusion) head/neck vessels
+  - "3975"           # Endovascular embolization of aneurysm, bare coils
+  - "3976"           # Endovascular embolization of aneurysm, bioactive coils
+icd10_proc:          # matched as prefixes (ICD-10-PCS)
+  - "03V"            # Restriction of upper artery (clipping/coiling of intracranial arteries)
+  - "03L"            # Occlusion of upper artery (embolization)
+eicu_treatment_patterns:   # regex, case-insensitive, against eICU treatmentstring
+  - "aneurysm.*clip"
+  - "aneurysm.*coil"
+  - "clipping"
+  - "coiling"
+notes: >
+  ICD-10-PCS restriction/occlusion codes are broad; combined with an SAH+cerebral
+  location they identify aneurysm securing. Treated as supportive evidence of an
+  aneurysmal source when a discrete aneurysm diagnosis is absent.

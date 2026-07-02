@@ -1,0 +1,19 @@
+name: dci_procedures
+description: Rescue therapy for vasospasm/DCI — cerebral angioplasty / intra-arterial vasodilator
+icd9_proc:
+  - "0061"           # Percutaneous angioplasty of intracranial vessel(s)
+icd10_proc:          # matched as prefixes (ICD-10-PCS dilation of intracranial arteries)
+  - "037G"           # Dilation of intracranial artery
+  - "037H"           # Dilation of intracranial artery (variants)
+eicu_treatment_patterns:   # regex, case-insensitive, against eICU treatmentstring
+  - "cerebral angioplasty"
+  - "intracranial angioplasty"
+  - "intra-?arterial.*(vasodilator|verapamil|nicardipine|milrinone|papaverine)"
+delayed_infarction_icd10:  # supportive (needs a delayed window where timing allows)
+  - "I63"            # Cerebral infarction
+delayed_infarction_icd9:
+  - "434"            # Occlusion of cerebral arteries (infarction)
+notes: >
+  Nimodipine is standard of care for ALL aSAH and is therefore NOT a DCI marker
+  (excluded). Rescue endovascular therapy and delayed infarction are specific to
+  clinically significant vasospasm/DCI.

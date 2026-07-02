@@ -1,0 +1,38 @@
+# ---- PhysioNet data must NEVER be committed (DUA) ----
+data/
+!data/synthetic/
+config/paths.yaml
+*.csv
+*.csv.gz
+*.db
+*.duckdb
+*.parquet
+
+# outputs are derived, regenerate locally
+outputs/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+
+# os / editor
+.DS_Store
+._*
+.vscode/
+.idea/
+
+# graphify
+graphify-out/
+
+# dashboard build artifacts
+dashboard/node_modules/
+dashboard/dist/

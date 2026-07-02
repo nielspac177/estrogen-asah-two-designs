@@ -1,0 +1,22 @@
+# GWAS summary stats are large / restricted — never commit
+data/gwas/
+*.txt.gz
+*.tsv.gz
+*.vcf.gz
+*.csv
+outputs/
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+._*
+graphify-out/
+data/ldref/
+*.tgz
+*.zip
+*.bed
+*.bim
+*.fam

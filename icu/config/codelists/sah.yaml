@@ -1,0 +1,9 @@
+name: sah
+description: Nontraumatic subarachnoid hemorrhage
+icd9:
+  - "430"            # Subarachnoid hemorrhage (nontraumatic)
+icd10:               # matched as prefixes
+  - "I60"            # Nontraumatic subarachnoid hemorrhage (I60.0–I60.9)
+notes: >
+  Traumatic SAH is excluded at the cohort level (ICD "800–804/S06" head-injury
+  codes and eICU trauma-CNS strings); this list is nontraumatic SAH only.

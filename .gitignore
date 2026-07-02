@@ -1,0 +1,38 @@
+# PhysioNet data + GWAS never committed
+**/data/
+!**/data/synthetic/
+**/outputs/
+*.csv
+*.csv.gz
+*.tsv.gz
+*.txt.gz
+*.db
+*.duckdb
+*.parquet
+*.tgz
+*.zip
+*.bed
+*.bim
+*.fam
+*.vcf.gz
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# os / editor (exFAT AppleDouble)
+.DS_Store
+._*
+.vscode/
+.idea/
+
+# graphify / dashboards
+graphify-out/
+**/dashboard/dist/
