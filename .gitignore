@@ -36,3 +36,6 @@ venv/
 # graphify / dashboards
 graphify-out/
 **/dashboard/dist/
+
+# Paper prose + supplementary are NOT part of this companion-code repo
+manuscript/

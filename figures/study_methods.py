@@ -127,6 +127,6 @@ card(50, 10.5, 86, 10.5, [
     "case is stronger; where they differ, the disagreement points to which bias is at work."],
     head="SYNTHESIS ACROSS DESIGNS", fc=PUR_BG, ec=PUR, fs=8.8, lh=3.1)
 
-fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/paper/figures/study_methods.png",
+fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/figures/study_methods.png",
             dpi=180, bbox_inches="tight", facecolor="white")
 print("saved")

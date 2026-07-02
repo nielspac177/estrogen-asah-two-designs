@@ -125,6 +125,6 @@ card(50, 4.3, 92, 5.6, [
     "Estrogen does not measurably protect against aneurysmal SAH in humans."],
     fc="#12303a", ec="#12303a", tc="white", fs=10.2, rs=1.8, shadow=True)
 
-fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/paper/figures/study_workflow.png",
+fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/figures/study_workflow.png",
             dpi=180, bbox_inches="tight", facecolor="white")
 print("saved")

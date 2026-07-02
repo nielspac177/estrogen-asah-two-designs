@@ -67,6 +67,6 @@ ax.add_patch(FancyArrowPatch((32, 27), (40, 27), arrowstyle="-|>", mutation_scal
 ax.add_patch(FancyArrowPatch((88, 27), (95.5, 27), arrowstyle="-|>", mutation_scale=17,
              color=MUTE, lw=2))
 
-fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/paper/figures/graphical_abstract.png",
+fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/figures/graphical_abstract.png",
             dpi=200, bbox_inches="tight", facecolor="white")
 print("saved")
