@@ -53,19 +53,13 @@ the other hormone. The positive control is univariable (unadjusted) MR.
 
 ## Table 1. Baseline characteristics of the aSAH cohort, by menopausal stratum
 
-| Characteristic | Overall (n = 1,771) | Premenopausal women (n = 313) | Postmenopausal women (n = 792) | Men (n = 666) |
-|---|---|---|---|---|
-| Age, mean, y | 59.0 | 41.5 | 66.4 | 58.4 |
-| Hypertension, % | 36.7 | 30.7 | 41.0 | 34.4 |
-| Current/former smoking, % | 12.8 | 12.5 | 12.9 | 12.8 |
-| Diabetes, % | 7.5 | 5.1 | 7.4 | 8.6 |
-| APACHE severity, mean† | 48.2 | 37.5 | 49.5 | 51.7 |
-| DCI / vasospasm, % | 12.5 | 16.3 | 10.4 | 13.2 |
-| In-hospital mortality, % | 14.2 | 7.7 | 14.8 | 16.5 |
+Demographics, comorbidities, illness severity, and outcomes for the pooled MIMIC-IV
++ eICU cohort. APACHE is recorded in eICU only; comorbidities are from diagnosis
+codes. The higher crude DCI in premenopausal women alongside their lower mortality
+reflects the competing-risk and age structure discussed in the paper, not an
+estrogen effect.
 
-†APACHE recorded in eICU only. Comorbidities are from diagnosis codes. The higher
-crude DCI in premenopausal women alongside their lower mortality reflects the
-competing-risk and age structure discussed in the paper, not an estrogen effect.
+![Table 1](figures/table1.png)
 
 ## Table 2. Estimand comparison across the two designs
 
