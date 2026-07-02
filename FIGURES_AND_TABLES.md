@@ -42,6 +42,13 @@ menopausal stratum; genetic estimates are per year or per standard deviation of 
 exposure; the positive control (menopause → breast cancer) is a different outcome
 shown to validate the genetic pipeline.
 
+Adjustment: the observational estimates are adjusted for hypertension, smoking, and
+diabetes, with cluster-robust standard errors by hospital; age is deliberately not
+adjusted for because it defines the exposure (adjusting for it removes the contrast).
+The genetic estimates are two-sample Mendelian randomization, random-effects IVW
+unless a method is named; the two multivariable-MR rows are mutually adjusted for
+the other hormone. The positive control is univariable (unadjusted) MR.
+
 ![Results forest table](figures/results_forest_table.png)
 
 ## Table 1. Baseline characteristics of the aSAH cohort, by menopausal stratum

@@ -1,96 +1,109 @@
-"""Figure 3. Results table with an embedded forest plot (JAMA/NEJM style).
+"""Figure 3. Results table with an embedded forest plot, JAMA table style.
 
-A single figure laid out as a table: text columns on the left and right, a central
-forest column on a shared log-odds-ratio axis with a reference line at OR = 1.
-Rows are grouped by design. Values are the final estimates from both arms.
+Horizontal rules only (no vertical gridlines or box), monochrome markers, square
+points with capped confidence intervals, grouped section headers with light
+shading, and footnotes. Values are the final estimates from both arms.
 """
 import matplotlib
 matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
+from matplotlib.patches import Rectangle
 
-plt.rcParams.update({"font.family": ["Avenir Next", "Arial"], "font.size": 9.5})
-INK = "#1b2733"; MUTE = "#5b6b7a"; RED = "#c0392b"; GRID = "#e7ebef"
-BLUE = "#0B6FB8"; GREEN = "#0E8F6E"; ORANGE = "#C77A0A"
+plt.rcParams.update({"font.family": ["Helvetica Neue", "Arial"], "font.size": 9.5})
+INK = "#141414"; MARK = "#222222"; RULEC = "#141414"; GREY = "#8a8a8a"; SHADE = "#f0f0f0"
 
-# section, label, N text, OR, lo, hi, P text, colour
+# kind, label, No., OR, lo, hi, P, footnote-mark
 ROWS = [
-    ("H", "Observational (ICU cohort)", "", None, None, None, "", BLUE),
-    ("R", "Postmenopausal vs premenopausal", "1105", 0.86, 0.58, 1.28, ".46", BLUE),
-    ("R", "Age × sex difference-in-differences", "1771", 1.04, 0.62, 1.76, "", BLUE),
-    ("H", "Genetic (Mendelian randomization), aSAH", "", None, None, None, "", GREEN),
-    ("R", "Age at menopause, IVW", "85", 1.03, 0.97, 1.09, ".32", GREEN),
-    ("R", "Age at menopause, MR-Egger", "85", 1.10, 0.98, 1.24, ".10", GREEN),
-    ("R", "Age at menopause, weighted median", "85", 1.09, 1.00, 1.19, ".06", GREEN),
-    ("R", "SHBG, women", "82", 0.73, 0.41, 1.31, ".29", GREEN),
-    ("R", "Total testosterone", "58", 0.98, 0.77, 1.27, ".91", GREEN),
-    ("R", "SHBG, women (MVMR)", "106", 1.06, 0.50, 2.28, ".88", GREEN),
-    ("R", "Bioavailable testosterone (MVMR)", "106", 1.03, 0.57, 1.86, ".93", GREEN),
-    ("H", "Positive control", "", None, None, None, "", ORANGE),
-    ("R", "Age at menopause → breast cancer", "207", 1.055, 1.041, 1.069, "<.001", ORANGE),
+    ("H", "Observational (ICU cohort)", "", None, None, None, "", ""),
+    ("R", "Postmenopausal vs premenopausal", "1105", 0.86, 0.58, 1.28, ".46", "a"),
+    ("R", "Age × sex difference-in-differences", "1771", 1.04, 0.62, 1.76, "", "a"),
+    ("H", "Genetic (Mendelian randomization), aSAH", "", None, None, None, "", ""),
+    ("R", "Age at menopause, IVW", "85", 1.03, 0.97, 1.09, ".32", "b"),
+    ("R", "Age at menopause, MR-Egger", "85", 1.10, 0.98, 1.24, ".10", "b"),
+    ("R", "Age at menopause, weighted median", "85", 1.09, 1.00, 1.19, ".06", "b"),
+    ("R", "SHBG, women", "82", 0.73, 0.41, 1.31, ".29", "b"),
+    ("R", "Total testosterone", "58", 0.98, 0.77, 1.27, ".91", "b"),
+    ("R", "SHBG, women, MVMR", "106", 1.06, 0.50, 2.28, ".88", "c"),
+    ("R", "Bioavailable testosterone, MVMR", "106", 1.03, 0.57, 1.86, ".93", "c"),
+    ("H", "Positive control", "", None, None, None, "", ""),
+    ("R", "Age at menopause and breast cancer", "207", 1.055, 1.041, 1.069, "<.001", "d"),
 ]
 
-# column x-positions (0-100) and forest axis
-X_LBL, X_N = 1.5, 44
-FX_L, FX_R = 47, 74          # forest column pixels
+X_LBL, X_N = 1.5, 43
+FX_L, FX_R = 46, 70
 OR_LO, OR_HI = 0.4, 2.6
-X_CI, X_P = 76.5, 99
+X_CI, X_P = 72.5, 99
 TICKS = [0.5, 0.75, 1.0, 1.5, 2.0]
 
 def fx(orr):
     return FX_L + (np.log(orr) - np.log(OR_LO)) / (np.log(OR_HI) - np.log(OR_LO)) * (FX_R - FX_L)
 
 n = len(ROWS)
-fig, ax = plt.subplots(figsize=(9.6, 0.5 * n + 1.6))
+fig, ax = plt.subplots(figsize=(9.4, 0.52 * n + 2.2))
 ax.axis("off"); ax.set_xlim(0, 100)
-top = n + 1.2
-ax.set_ylim(-1.4, top + 1.2)
+top = n + 1.0
+ax.set_ylim(-3.6, top + 1.4)
 
-# column headers
-hy = top
+# top rule + column headers + header rule
+ax.plot([0, 100], [top + 0.9, top + 0.9], color=RULEC, lw=1.6)
 for x, t, ha in [(X_LBL, "Analysis", "left"), (X_N, "No.", "right"),
-                 (X_CI, "OR (95% CI)", "left"), (X_P, "P", "right")]:
-    ax.text(x, hy, t, ha=ha, va="center", fontsize=9.5, fontweight="bold", color=INK)
-ax.text((FX_L + FX_R) / 2, hy, "Odds ratio (95% CI)", ha="center", va="center",
-        fontsize=9.5, fontweight="bold", color=INK)
-ax.plot([0.5, 99.5], [hy - 0.55, hy - 0.55], color=INK, lw=1.1)
+                 (X_CI, "OR (95% CI)", "left"), (X_P, "P Value", "right")]:
+    ax.text(x, top + 0.1, t, ha=ha, va="center", fontsize=9.5, fontweight="bold", color=INK)
+ax.plot([0, 100], [top - 0.55, top - 0.55], color=RULEC, lw=1.0)
 
-# forest gridlines + reference line spanning data rows
-y_bottom = 0.4
-for orr in TICKS:
-    ax.plot([fx(orr), fx(orr)], [y_bottom, hy - 0.7], color=GRID, lw=0.9, zorder=0)
-ax.plot([fx(1.0), fx(1.0)], [y_bottom, hy - 0.7], color=RED, ls="--", lw=1.2, zorder=1)
+y0 = top - 1.5
+# reference line at OR=1 spanning the data rows
+ax.plot([fx(1.0), fx(1.0)], [-0.4, top - 0.7], color=GREY, lw=0.9, zorder=0)
 
-# rows
-y = top - 1.1
-for kind, label, ntxt, orr, lo, hi, ptxt, c in ROWS:
+y = y0
+for kind, label, ntxt, orr, lo, hi, ptxt, fn in ROWS:
     if kind == "H":
-        ax.text(X_LBL, y, label, ha="left", va="center", fontsize=9.4,
-                fontweight="bold", color=c)
+        ax.add_patch(Rectangle((0, y - 0.5), 100, 1.0, facecolor=SHADE, edgecolor="none", zorder=0))
+        ax.text(X_LBL, y, label, ha="left", va="center", fontsize=9.3, fontweight="bold", color=INK)
     else:
-        ax.text(X_LBL + 1.5, y, label, ha="left", va="center", fontsize=9.2, color=INK)
-        ax.text(X_N, y, ntxt, ha="right", va="center", fontsize=9.0, color=MUTE)
-        ax.plot([fx(lo), fx(hi)], [y, y], color=c, lw=2.0, solid_capstyle="round", zorder=3)
-        ax.add_patch(Circle((fx(orr), y), 0.16, facecolor=c, edgecolor="white", lw=0.6,
-                            zorder=4, transform=ax.transData))
-        ax.text(X_CI, y, f"{orr:.2f} ({lo:.2f}–{hi:.2f})", ha="left", va="center",
+        lab = label + (f"$^{{{fn}}}$" if fn else "")
+        ax.text(X_LBL + 1.2, y, lab, ha="left", va="center", fontsize=9.2, color=INK)
+        ax.text(X_N, y, ntxt, ha="right", va="center", fontsize=9.0, color=INK)
+        # CI line with end caps + square marker
+        ax.plot([fx(lo), fx(hi)], [y, y], color=MARK, lw=1.2, zorder=3)
+        for xe in (fx(lo), fx(hi)):
+            ax.plot([xe, xe], [y - 0.16, y + 0.16], color=MARK, lw=1.2, zorder=3)
+        ax.scatter([fx(orr)], [y], marker="s", s=26, color=MARK, zorder=4)
+        ax.text(X_CI, y, f"{orr:.2f} ({lo:.2f}-{hi:.2f})", ha="left", va="center",
                 fontsize=9.0, color=INK)
         ax.text(X_P, y, ptxt, ha="right", va="center", fontsize=9.0, color=INK)
     y -= 1.0
 
-# forest axis ticks
-for orr in TICKS:
-    ax.text(fx(orr), y_bottom - 0.55, f"{orr:g}", ha="center", va="top", fontsize=8, color=MUTE)
-ax.annotate("", xy=(fx(0.62), y_bottom - 1.15), xytext=(fx(0.9), y_bottom - 1.15),
-            arrowprops=dict(arrowstyle="->", color=MUTE, lw=1))
-ax.annotate("", xy=(fx(1.6), y_bottom - 1.15), xytext=(fx(1.11), y_bottom - 1.15),
-            arrowprops=dict(arrowstyle="->", color=MUTE, lw=1))
-ax.text(fx(0.62), y_bottom - 1.7, "protective", ha="center", fontsize=7.6, color=MUTE)
-ax.text(fx(1.6), y_bottom - 1.7, "harmful", ha="center", fontsize=7.6, color=MUTE)
+bottom = y + 0.5
+ax.plot([0, 100], [bottom, bottom], color=RULEC, lw=1.6)
 
-ax.set_title("Estrogen and aneurysmal SAH: estimates across both designs",
-             fontsize=11.5, fontweight="bold", pad=10, loc="left", x=0.01)
+# forest axis
+for orr in TICKS:
+    ax.plot([fx(orr), fx(orr)], [bottom, bottom - 0.28], color=INK, lw=0.9)
+    ax.text(fx(orr), bottom - 0.85, f"{orr:g}", ha="center", va="top", fontsize=8, color=INK)
+ax.annotate("", xy=(fx(0.52), bottom - 1.7), xytext=(fx(0.85), bottom - 1.7),
+            arrowprops=dict(arrowstyle="->", color=INK, lw=0.9))
+ax.annotate("", xy=(fx(1.9), bottom - 1.7), xytext=(fx(1.18), bottom - 1.7),
+            arrowprops=dict(arrowstyle="->", color=INK, lw=0.9))
+ax.text(fx(1.0) - 1.4, bottom - 2.3, "Favors lower risk", ha="right", fontsize=7.2, color=INK)
+ax.text(fx(1.0) + 1.4, bottom - 2.3, "Favors higher risk", ha="left", fontsize=7.2, color=INK)
+
+# footnotes
+fns = [
+    "Abbreviations: aSAH, aneurysmal subarachnoid haemorrhage; IVW, inverse-variance weighted;",
+    "MVMR, multivariable Mendelian randomization; OR, odds ratio; SHBG, sex hormone-binding globulin.",
+    "$^{a}$Adjusted for hypertension, smoking, and diabetes, with cluster-robust SEs by hospital; age is",
+    "excluded because it defines the exposure.  $^{b}$Two-sample MR, random-effects IVW unless noted.",
+    "$^{c}$Multivariable MR, mutually adjusted for the other hormone.  $^{d}$Different outcome (breast",
+    "cancer), shown to validate the genetic pipeline.",
+]
+fy = bottom - 3.0
+for i, t in enumerate(fns):
+    ax.text(0, fy - i * 0.62, t, ha="left", va="top", fontsize=7.2, color="#333")
+
+ax.text(0, top + 2.0, "Table. Estimates for estrogen and aneurysmal SAH across both study designs",
+        ha="left", fontsize=11, fontweight="bold", color=INK)
 fig.savefig("/Volumes/Niels 2/MIMIC/estrogen-asah-two-designs/figures/results_forest_table.png",
-            dpi=190, bbox_inches="tight", facecolor="white")
+            dpi=200, bbox_inches="tight", facecolor="white")
 print("saved")
