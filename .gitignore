@@ -44,3 +44,6 @@ manuscript/
 figures/final/
 figures/*.pdf
 figures/*.svg
+
+# assembled submission package (contains the manuscript as docx; keep out of companion-code repo)
+submission/
