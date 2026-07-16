@@ -95,9 +95,9 @@ card(73.5, 51, 38, 9, ["genetic pleiotropy", "(but immune to age confounding)"],
      head="WEAKNESS", fc=AMBER_BG, ec=AMBER, tc="#6b4a12", fs=8.7, lh=3.0)
 
 # result (emphasize the OR)
-card(26.5, 38, 38, 9, ["No protective effect", "OR 0.86 (0.58–1.28)"],
+card(26.5, 38, 38, 9, ["No protective effect", "DiD 1.04 (0.62–1.76)"],
      head="RESULT", fc="white", ec=BLUE, fs=9.2, lh=3.1, emph_last=True)
-card(73.5, 38, 38, 9, ["No protective effect", "OR 1.03 (0.98–1.09)"],
+card(73.5, 38, 38, 9, ["No protective effect", "OR 1.03 (0.97–1.09)"],
      head="RESULT", fc="white", ec=GREEN, fs=9.2, lh=3.1, emph_last=True)
 
 # intra-lane arrows

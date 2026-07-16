@@ -19,7 +19,7 @@ Two arms, chosen because their weaknesses do not overlap:
 - **`icu/`, observational.** Pooled MIMIC-IV + eICU aSAH cohort (n = 1,771),
   menopausal state vs delayed cerebral ischaemia. The design cannot separate
   estrogen from age, which is shown, not hidden, by a specification curve and an
-  age-by-sex difference-in-differences model. Adjusted OR 0.86 (0.58–1.28).
+  age-by-sex difference-in-differences model. Primary OR 0.52 (0.41–0.66), significant but non-identifiable (an age artifact, not an estrogen effect).
 - **`mr/`, genetic.** Two-sample Mendelian randomization of genetically predicted
   age at natural menopause on aSAH. IVW OR 1.03 per year (0.97–1.09); a positive
   control (menopause → breast cancer) recovers the known effect and validates the

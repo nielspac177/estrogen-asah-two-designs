@@ -41,7 +41,7 @@ ax.text((x0 + x1) / 2, 8, "odds ratio (log scale)  ·  1.0 = no effect",
         ha="center", fontsize=8.5, color=MUTE)
 
 rows = [
-    ("Observational  (MIMIC-IV + eICU, n=1,771)", 0.86, 0.58, 1.28, BLUE, 31),
+    ("Observational, age-by-sex DiD  (n=1,771)",   1.04, 0.62, 1.76, BLUE, 31),
     ("Genetic  (Mendelian randomization)",         1.03, 0.97, 1.09, GREEN, 22),
 ]
 for label, orr, lo, hi, c, yy in rows:

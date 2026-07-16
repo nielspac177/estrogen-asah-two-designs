@@ -58,9 +58,10 @@ Outputs (git-ignored) land in `icu/outputs/`: `cohort.parquet`, `table1.csv`,
 curve + age×sex difference-in-differences), `balance.csv`, figures, and the
 `dashboard/dist/index.html`.
 
-Key numbers on real data: 1,771 aSAH admissions; primary adjusted OR 0.86
-(0.58–1.28); specification curve 41/71 significant forks, all anti-protective;
-age×sex difference-in-differences 1.04 (0.62–1.76).
+Key numbers on real data: 1,771 aSAH admissions; primary OR 0.52
+(0.41–0.66), significant but non-identifiable (age artifact); specification curve
+41 of 71 converged forks significant, all anti-protective; age×sex
+difference-in-differences 1.04 (0.62–1.76), null.
 
 ## 2. Arm 2, genetic (Mendelian randomization)
 
@@ -69,13 +70,19 @@ age×sex difference-in-differences 1.04 (0.62–1.76).
 Public summary statistics only. `mr/docs/gwas_access.md` gives exact URLs and the
 build/format gotchas. In short, into `mr/data/gwas/`:
 
-- Outcome: Bakker 2020 intracranial-aneurysm GWAS (Figshare 11303372), the
-  `SAH-only_European_excludingUKBB` file.
+- Outcome: Bakker 2020 intracranial-aneurysm GWAS (Figshare 11303372). Primary is
+  the `SAH-only_European_excludingUKBB` file (rupture). For the disease-course
+  cascade also take `uIA-only` (unruptured, formation; file id 23235476) and
+  `Stage_1_excludingUKBB` (combined ruptured + unruptured, European; file id
+  29146428).
 - Exposures: age at natural menopause (Ruth 2021, ReproGen); SHBG and bioavailable
   testosterone in women (Ruth 2020, GWAS Catalog GCST90012107 / GCST90012102,
   Build37 files).
 - Positive control: breast cancer (Michailidou 2017, GCST004988, the **Build37**
   file, not the GRCh38 harmonised one).
+- Independent replication + negative control: FinnGen release 11 (GRCh38, matched by
+  rsID) — `I9_SAH` (nontraumatic SAH) and `K11_APPENDACUT` (acute appendicitis,
+  negative control), streamed from the FinnGen public bucket (see `gwas_access.md`).
 
 ### 2b. Run the analyses
 
@@ -86,7 +93,15 @@ uv run python scripts/run_mr_poscontrol.py   # positive control: ANM -> breast c
 uv run python scripts/run_mr_multiexposure.py # SHBG + testosterone -> aSAH
 uv run python scripts/run_mvmr.py            # multivariable MR (SHBG + bioT)
 uv run python scripts/run_mr_clumping_sensitivity.py
+uv run python scripts/run_mr_outcomes.py     # disease-course cascade: uIA / aSAH / combined IA
+uv run python scripts/run_mr_finngen.py      # FinnGen SAH replication (writes rsID list, then stream-extract, then rerun)
+uv run python scripts/run_mr_finngen_negcontrol.py  # appendicitis negative control
 ```
+
+The cascade gives OR/yr 1.00 (formation), 1.03 (rupture), 1.01 (combined); FinnGen
+replication 0.98 (0.95–1.01); appendicitis negative control 1.00 (0.99–1.01). The
+FinnGen script prints the `curl | gunzip | grep` command to stream-extract only the
+instrument rows from the ~800 MB FinnGen files, so nothing large is stored.
 
 For gold-standard r² LD clumping (`scripts/run_mr_ld_clump.py`) you also need
 PLINK 2 and a 1000 Genomes European reference in `mr/data/ldref/` (EUR.bed/bim/fam
@@ -98,11 +113,23 @@ Key numbers: primary IVW OR 1.03/yr (0.97–1.09); positive control weighted-med
 
 ## 3. Regenerate the figures
 
+Data-driven figures need the analysis outputs first (Sections 1–2), plus
+`mr/scripts/export_figure_data.py` for the MR diagnostics. Then:
+
 ```bash
-python figures/study_methods.py
-python figures/study_workflow.py
-python figures/mr_forest.py
-python figures/graphical_abstract.py
+python figures/study_methods.py            # Figure 1, study design
+python figures/cohort_flow.py              # Figure 2, participant flow
+python figures/results_forest_table.py     # Figure 3, results (both designs)
+python figures/mr_cascade.py               # Figure 4, disease-course cascade + controls
+python figures/table1_figure.py            # Table 1 (rendered)
+python figures/overlap_nonidentifiability.py  # eFigure, non-identifiability
+python figures/mr_diagnostics.py           # eFigure, MR diagnostics
+python figures/observational_diagnostics.py   # eFigure, observational diagnostics
+python figures/dag.py                      # eFigure, causal diagrams
+python figures/study_workflow.py           # workflow overview
+python figures/graphical_abstract.py       # graphical abstract
+
+python figures/export_final.py             # -> figures/final/ numbered PNG + PDF + SVG
 ```
 
 The design and abstract figures are self-contained. The forest embeds the final MR

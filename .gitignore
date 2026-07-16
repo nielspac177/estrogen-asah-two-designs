@@ -39,3 +39,8 @@ graphify-out/
 
 # Paper prose + supplementary are NOT part of this companion-code repo
 manuscript/
+
+# generated numbered exports and vector copies (regenerate with figures/export_final.py)
+figures/final/
+figures/*.pdf
+figures/*.svg

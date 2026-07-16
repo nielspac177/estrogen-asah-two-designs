@@ -116,6 +116,42 @@ def exposure_logistic(df: pd.DataFrame, exposure: str = "hrt_exposure",
     return _fit(d, formula, "exp", cluster)
 
 
+def menopause_on(df: pd.DataFrame, outcome: str, covariates: list[str] | None = None,
+                 cluster: str = "hospital_id") -> Estimate:
+    """Postmenopausal vs premenopausal (women) on an arbitrary binary outcome.
+
+    Used to report delayed cerebral ischaemia and in-hospital mortality as
+    SEPARATE cause-specific outcomes (competing risks) rather than a composite.
+    """
+    covariates = covariates or DEFAULT_COVARIATES
+    d = df[df["menopausal_stratum"].isin(["premenopausal", "postmenopausal"])].copy()
+    d["post"] = (d["menopausal_stratum"] == "postmenopausal").astype(float)
+    d["y"] = d[outcome].astype("boolean").astype("float")
+    d = _prep(d, covariates + ["y", "post"])
+    d = d.dropna(subset=["y", "post", *covariates])
+    return _fit(d, "y ~ post + " + " + ".join(covariates), "post", cluster)
+
+
+def sex_on(df: pd.DataFrame, outcome: str, covariates: list[str] | None = None,
+           cluster: str = "hospital_id") -> Estimate:
+    """Male vs female on an arbitrary binary outcome (cause-specific)."""
+    covariates = covariates or DEFAULT_COVARIATES
+    d = df.copy()
+    d["male"] = (df["sex"] == "M").astype(float)
+    d["y"] = d[outcome].astype("boolean").astype("float")
+    d = _prep(d, covariates + ["y", "male"])
+    d = d.dropna(subset=["y", "male", *covariates])
+    return _fit(d, "y ~ male + " + " + ".join(covariates), "male", cluster)
+
+
+def rates_by_stratum(df: pd.DataFrame, outcome: str) -> pd.DataFrame:
+    """Crude rate of an outcome by menopausal stratum (for competing-risk display)."""
+    d = df.copy()
+    d["o"] = d[outcome].astype("boolean").astype("float")
+    g = d.groupby("menopausal_stratum")["o"]
+    return pd.DataFrame({"n": g.size(), "events": g.sum(), "rate": g.mean()}).reset_index()
+
+
 def by_source(df: pd.DataFrame, **kwargs) -> dict[str, Estimate]:
     """Primary estimate within each data source, for meta-analytic pooling."""
     return {

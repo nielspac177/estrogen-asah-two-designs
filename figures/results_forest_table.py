@@ -16,7 +16,7 @@ INK = "#141414"; MARK = "#222222"; RULEC = "#141414"; GREY = "#8a8a8a"; SHADE = 
 # kind, label, No., OR, lo, hi, P, footnote-mark
 ROWS = [
     ("H", "Observational (ICU cohort)", "", None, None, None, "", ""),
-    ("R", "Postmenopausal vs premenopausal", "1105", 0.86, 0.58, 1.28, ".46", "a"),
+    ("R", "Postmenopausal vs premenopausal", "1105", 0.52, 0.41, 0.66, "<.001", "a"),
     ("R", "Age × sex difference-in-differences", "1771", 1.04, 0.62, 1.76, "", "a"),
     ("H", "Genetic (Mendelian randomization), aSAH", "", None, None, None, "", ""),
     ("R", "Age at menopause, IVW", "85", 1.03, 0.97, 1.09, ".32", "b"),
@@ -93,8 +93,9 @@ ax.text(fx(1.0) + 1.4, bottom - 2.3, "Favors higher risk", ha="left", fontsize=7
 fns = [
     "Abbreviations: aSAH, aneurysmal subarachnoid haemorrhage; IVW, inverse-variance weighted;",
     "MVMR, multivariable Mendelian randomization; OR, odds ratio; SHBG, sex hormone-binding globulin.",
-    "$^{a}$Adjusted for hypertension, smoking, and diabetes, with cluster-robust SEs by hospital; age is",
-    "excluded because it defines the exposure.  $^{b}$Two-sample MR, random-effects IVW unless noted.",
+    "$^{a}$Adjusted for hypertension, smoking, diabetes (cluster-robust SEs by hospital). Age is not adjusted",
+    "(it defines the exposure), so the menopause contrast is a non-identifiable age artifact, not an estrogen",
+    "effect; the age$\\times$sex difference-in-differences is the identifiable estimand.  $^{b}$Two-sample MR, random-effects IVW.",
     "$^{c}$Multivariable MR, mutually adjusted for the other hormone.  $^{d}$Different outcome (breast",
     "cancer), shown to validate the genetic pipeline.",
 ]
